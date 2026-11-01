@@ -10,7 +10,12 @@
 
 ## 域名
 
-域名和 DNS 在 Cloudflare。`www.xward.app` 用 301 跳到 `xward.app`，这不在代码里，是 Cloudflare 后台 xward.app 下的两项配置：
+域名在 Cloudflare 注册，它要求使用自己的域名服务器，所以 DNS 记录留在 Cloudflare。那里只有下面三条记录，都不开代理（DNS only），取值来自 Vercel 项目的域名设置：
 
-- DNS 记录：`A`，名字 `www`，地址 `192.0.2.1`，开代理。这个地址只是占位，请求到不了它。
-- Redirect Rule，名字 `www to root`：把 `https://www.xward.app/*` 跳到 `https://xward.app/${1}`，状态码 301，保留查询参数。
+| 类型 | 名字 | 内容 |
+| --- | --- | --- |
+| `A` | `@` | `216.150.1.1` |
+| `A` | `@` | `216.150.16.1` |
+| `CNAME` | `www` | `b0a3037401259471.vercel-dns-016.com` |
+
+`www.xward.app` 用 301 跳到 `xward.app`。这不在代码里，是 Vercel 项目 Settings > Domains 里的配置。证书由 Vercel 自动签发和续期。
