@@ -1,21 +1,21 @@
 # xward-website
 
-[xward.app](https://xward.app) 的页面。Xward 是一款 iPhone 倒数 app。
+The page at [xward.app](https://xward.app) for Xward, an iPhone countdown app.
 
-`public/` 里的静态文件原样发布，没有构建步骤。推送到 `main` 后，Vercel 会自动部署到生产环境。
+Vercel serves the static files in `public/` as they are, with no build step. A push to `main` deploys to production.
 
-本地预览：直接打开 `public/index.html`。
+To preview the page locally, open `public/index.html` in a browser.
 
-截图在 `public/screens/`，是 app 的真实界面配样例数据，界面改了要重新截。尺寸是宽 804 像素、sRGB 的 JPEG。
+The screenshots in `public/screens/` show the real app with sample data. Retake them when the app's interface changes. Each one is an sRGB JPEG, 804 pixels wide.
 
-## 域名
+## Domain
 
-域名在 Cloudflare 注册，它要求使用自己的域名服务器，所以 DNS 记录留在 Cloudflare。那里只有下面三条记录，都不开代理（DNS only），取值来自 Vercel 项目的域名设置：
+The domain is registered with Cloudflare, which requires its own name servers, so the DNS records stay there. Cloudflare holds only these three records, all set to DNS only, with the proxy off. Their values come from the domain settings of the Vercel project.
 
-| 类型 | 名字 | 内容 |
+| Type | Name | Content |
 | --- | --- | --- |
 | `A` | `@` | `216.150.1.1` |
 | `A` | `@` | `216.150.16.1` |
 | `CNAME` | `www` | `b0a3037401259471.vercel-dns-016.com` |
 
-`www.xward.app` 用 308 跳到 `xward.app`。这不在代码里，是 Vercel 项目 Settings > Domains 里的配置。证书由 Vercel 自动签发和续期。
+`www.xward.app` redirects to `xward.app` with a 308 status. This redirect isn't in the code; it's set in the Vercel project under **Settings** > **Domains**. Vercel issues and renews the certificate automatically.
