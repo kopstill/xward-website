@@ -18,4 +18,4 @@
 | `A` | `@` | `216.150.16.1` |
 | `CNAME` | `www` | `b0a3037401259471.vercel-dns-016.com` |
 
-`www.xward.app` 用 301 跳到 `xward.app`。这不在代码里，是 Vercel 项目 Settings > Domains 里的配置。证书由 Vercel 自动签发和续期。
+`www.xward.app` 用 308 跳到 `xward.app`。这不在代码里，是 Vercel 项目 Settings > Domains 里的配置。证书由 Vercel 自动签发和续期。
