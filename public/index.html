@@ -24,13 +24,15 @@
     --accent: linear-gradient(100deg, #E85A24, #EA5550 55%, #DE457A);
     --glow-a: rgba(255, 181, 71, .42);
     --glow-b: rgba(222, 69, 122, .24);
-    --phone-height: min(70vh, 680px);
+    --dot: #86868B;
+    /* Tall enough to fill the window, leaving room for the caption and dots. */
+    --phone-height: min(100vh - 160px, 860px);
     --phone-width: calc(var(--phone-height) * .46);
-    --gutter: clamp(24px, 7vw, 112px);
+    --gutter: clamp(24px, 5vw, 72px);
   }
 
   @supports (height: 1svh) {
-    :root { --phone-height: min(70svh, 680px); }
+    :root { --phone-height: min(100svh - 160px, 860px); }
   }
 
   @media (prefers-color-scheme: dark) {
@@ -46,6 +48,7 @@
       --accent: linear-gradient(100deg, #F0682C, #EA5550 55%, #DE457A);
       --glow-a: rgba(240, 104, 44, .3);
       --glow-b: rgba(222, 69, 122, .26);
+      --dot: #636366;
     }
   }
 
@@ -63,10 +66,15 @@
 
   main {
     position: relative;
+    /* Shrink to the text and the phone, so the page's two side margins match. */
+    width: fit-content;
     min-height: 100vh;
     min-height: 100svh;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-columns: minmax(0, min(45vw, 54rem)) var(--phone-width);
+    column-gap: clamp(48px, 7vw, 128px);
     align-items: center;
   }
 
@@ -79,10 +87,10 @@
     letter-spacing: -.02em;
   }
 
-  .intro { padding: 88px 32px 72px var(--gutter); }
+  .intro { padding: 88px 0 72px; }
 
   h1 {
-    font-size: clamp(2.75rem, 5vw, 5.25rem);
+    font-size: clamp(2.75rem, 6.4vw, 8.5rem);
     font-weight: 700;
     line-height: 1.04;
     letter-spacing: -.028em;
@@ -99,9 +107,9 @@
     margin-top: clamp(20px, 2.4vw, 32px);
     max-width: 29em;
     color: var(--muted);
-    font-size: clamp(1.0625rem, 1.35vw, 1.3125rem);
+    font-size: clamp(1.0625rem, 1.55vw, 1.75rem);
     line-height: 1.45;
-    text-wrap: pretty;
+    text-wrap: balance;
   }
 
   .soon {
@@ -109,11 +117,11 @@
     align-items: center;
     gap: 10px;
     margin-top: clamp(28px, 3vw, 40px);
-    padding: 11px 20px 11px 16px;
+    padding: .7em 1.25em .7em 1em;
     border: 1px solid var(--hairline);
     border-radius: 999px;
     background: var(--glass);
-    font-size: 1rem;
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
     font-weight: 600;
   }
 
@@ -128,12 +136,17 @@
   .facts {
     margin-top: 16px;
     color: var(--muted);
-    font-size: .9375rem;
+    font-size: clamp(.9375rem, 1.05vw, 1.125rem);
   }
 
   .gallery {
     position: relative;
     min-width: 0;
+    padding-block: 32px 16px;
+    display: grid;
+    /* Fixed to the phone's width, so the wider caption can't push the phone sideways. */
+    grid-template-columns: 100%;
+    justify-items: center;
     isolation: isolate;
   }
 
@@ -141,47 +154,50 @@
     content: "";
     position: absolute;
     z-index: -1;
-    inset: 4% 8% 14%;
+    /* Spreads past the phone, but no further than the page's margin. */
+    inset: 4% max(-24%, -1 * var(--gutter)) 16%;
     background:
       radial-gradient(closest-side at 62% 34%, var(--glow-a), transparent),
       radial-gradient(closest-side at 40% 68%, var(--glow-b), transparent);
     filter: blur(48px);
   }
 
-  .track {
-    display: flex;
-    gap: clamp(16px, 2vw, 32px);
-    padding: 44px calc(50% - var(--phone-width) / 2) 12px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    position: relative;
-    outline-offset: -4px;
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 96px);
-    mask-image: linear-gradient(to right, transparent, #000 96px);
-  }
-
-  .track::-webkit-scrollbar { display: none; }
-  .track.dragging { cursor: grabbing; scroll-snap-type: none; }
-
-  .slide {
-    --distance: 0;
-    flex: none;
-    width: var(--phone-width);
-    scroll-snap-align: center;
-  }
-
   .phone {
+    position: relative;
+    width: var(--phone-width);
     padding: calc(var(--phone-width) * .028);
     border-radius: calc(var(--phone-width) * .168);
     background: var(--frame);
     box-shadow:
       inset 0 0 0 1px var(--frame-edge),
-      0 28px 56px -14px var(--phone-shadow);
-    transform: scale(calc(1 - .08 * var(--distance)));
+      0 36px 72px -18px var(--phone-shadow),
+      0 10px 24px -10px var(--phone-shadow);
+  }
+
+  /* The side buttons: the action button and volume on the left, power on the right. */
+  .phone::before,
+  .phone::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    background: var(--frame-edge);
+  }
+
+  .phone::before {
+    right: 100%;
+    top: 16%;
+    height: 5%;
+    border-radius: 2px 0 0 2px;
+    box-shadow:
+      0 calc(var(--phone-width) * .2) var(--frame-edge),
+      0 calc(var(--phone-width) * .37) var(--frame-edge);
+  }
+
+  .phone::after {
+    left: 100%;
+    top: 26%;
+    height: 10%;
+    border-radius: 0 2px 2px 0;
   }
 
   .screen {
@@ -202,48 +218,81 @@
     aspect-ratio: 126 / 37;
     border-radius: 999px;
     background: #000;
+    pointer-events: none;
   }
 
-  .screen img {
+  .track {
+    position: relative;
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    outline-offset: -4px;
+  }
+
+  .track::-webkit-scrollbar { display: none; }
+  .track.dragging { cursor: grabbing; scroll-snap-type: none; }
+
+  .slide {
+    flex: none;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .slide img {
     display: block;
     width: 100%;
     height: 100%;
     -webkit-user-drag: none;
   }
 
-  figcaption {
-    min-height: 2.7em;
-    margin-top: 20px;
+  .caption {
+    /* Wider than the phone; the grid centers it, so it overhangs both sides evenly. */
+    width: 26rem;
+    margin-top: 24px;
     color: var(--muted);
     font-size: .9375rem;
     line-height: 1.35;
     text-align: center;
     text-wrap: balance;
-    opacity: calc(1 - var(--distance));
   }
 
-  .controls {
+  .dots {
     display: flex;
-    justify-content: center;
-    gap: 12px;
-    padding-bottom: 24px;
+    margin-top: 4px;
   }
 
-  .controls button {
+  .dots button {
     display: grid;
     place-items: center;
-    width: 44px;
+    width: 28px;
     height: 44px;
     padding: 0;
-    border: 1px solid var(--hairline);
-    border-radius: 50%;
-    background: var(--glass);
-    color: var(--ink);
+    border: 0;
+    background: none;
     cursor: pointer;
-    transition: opacity .2s;
   }
 
-  .controls button:disabled { opacity: .3; cursor: default; }
+  .dots button::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--dot);
+    transition: width .25s;
+  }
+
+  .dots button[aria-current="true"]::before {
+    width: 20px;
+    background: var(--accent);
+  }
 
   .fineprint {
     position: absolute;
@@ -253,26 +302,27 @@
     font-size: .8125rem;
   }
 
-  @media (hover: none) {
-    .controls { display: none; }
+  /* The side margins get too thin for the overhang, so long captions wrap. Two lines keep the dots in place. */
+  @media (max-width: 1099px) {
+    .caption {
+      width: calc(var(--phone-width) + 2 * var(--gutter));
+      min-height: 2.7em;
+    }
   }
 
   @media (max-width: 899px) {
+    /* The page scrolls here, so the phone sizes to the width instead of the height. */
     :root {
-      --phone-height: min(66vh, 600px);
+      --phone-width: min(80vw, 340px);
       --gutter: 24px;
     }
 
-    @supports (height: 1svh) {
-      :root { --phone-height: min(66svh, 600px); }
-    }
-
-    main { display: block; }
-    .brand { position: static; display: block; padding: 24px var(--gutter) 0; }
-    .intro { padding: 40px var(--gutter) 0; }
-    .track { padding-top: 40px; -webkit-mask-image: none; mask-image: none; }
-    .gallery::before { inset: 0 0 12%; }
-    .fineprint { position: static; display: block; padding: 8px var(--gutter) 28px; text-align: center; }
+    main { display: block; width: auto; }
+    .brand { position: static; display: block; padding-top: 24px; }
+    .intro { padding: 40px 0 0; }
+    .gallery { padding-block: 40px 0; }
+    .gallery::before { inset: 0 -24px 12%; }
+    .fineprint { position: static; display: block; padding-block: 8px 28px; text-align: center; }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -303,31 +353,40 @@
   </section>
 
   <section class="gallery" aria-label="App screenshots">
-    <div class="track" tabindex="0">
-      <figure class="slide">
-        <div class="phone"><div class="screen"><img src="screens/home.jpg" width="804" height="1748" draggable="false" alt="The Xward home screen: a large orange card reads 1,195 workdays left until retirement, above cards for the weekend, a birthday, a flight, and a trip."></div></div>
-        <figcaption>Pin the big one. The rest line up by date.</figcaption>
-      </figure>
-      <figure class="slide">
-        <div class="phone"><div class="screen"><img src="screens/retirement.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="A retirement countdown showing 1,195 workdays left, 83% of a career done, 234 Mondays, 123 paydays, and a timeline of milestones."></div></div>
-        <figcaption>Retirement in workdays, Mondays, and paydays.</figcaption>
-      </figure>
-      <figure class="slide">
-        <div class="phone"><div class="screen"><img src="screens/vacation.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="A countdown to a Japan trip showing 26 workdays left out of 40 days."></div></div>
-        <figcaption>Weekends, public holidays, and your days off don’t count.</figcaption>
-      </figure>
-      <figure class="slide">
-        <div class="phone"><div class="screen"><img src="screens/templates.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="The New Countdown screen listing seven templates: retirement, vacation, holiday, weekend, birthday, anniversary, and custom."></div></div>
-        <figcaption>Seven templates, or any date you like.</figcaption>
-      </figure>
-      <figure class="slide">
-        <div class="phone"><div class="screen"><img src="screens/home-dark.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="The Xward home screen in dark mode, with bright colored numbers on black."></div></div>
-        <figcaption>Just as good after dark.</figcaption>
-      </figure>
+    <div class="phone">
+      <div class="screen">
+        <div class="track" tabindex="0">
+          <figure class="slide" data-caption="Pin the big one. The rest line up by date.">
+            <picture>
+              <source media="(prefers-color-scheme: dark)" srcset="screens/home-dark.jpg">
+              <img src="screens/home.jpg" width="804" height="1748" draggable="false" alt="The Xward home screen: a large orange card reads 1,195 workdays left until retirement, above cards for the weekend, a birthday, a flight, and a trip.">
+            </picture>
+          </figure>
+          <figure class="slide" data-caption="Retirement in workdays, Mondays, and paydays.">
+            <img src="screens/retirement.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="A retirement countdown showing 1,195 workdays left, 83% of a career done, 234 Mondays, 123 paydays, and a timeline of milestones.">
+          </figure>
+          <figure class="slide" data-caption="Weekends, public holidays, and your days off don’t count.">
+            <img src="screens/vacation.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="A countdown to a Japan trip showing 26 workdays left out of 40 days.">
+          </figure>
+          <figure class="slide" data-caption="Seven templates, or any date you like.">
+            <img src="screens/templates.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="The New Countdown screen listing seven templates: retirement, vacation, holiday, weekend, birthday, anniversary, and custom.">
+          </figure>
+          <figure class="slide" data-caption="Light or dark, it follows your iPhone.">
+            <picture>
+              <source media="(prefers-color-scheme: dark)" srcset="screens/home.jpg">
+              <img src="screens/home-dark.jpg" width="804" height="1748" draggable="false" loading="lazy" alt="The Xward home screen in the opposite appearance: dark on a light page, light on a dark page.">
+            </picture>
+          </figure>
+        </div>
+      </div>
     </div>
-    <div class="controls">
-      <button type="button" aria-label="Previous screenshot"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5 5.5 9l5.5 5.5"/></svg></button>
-      <button type="button" aria-label="Next screenshot"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 3.5 5.5 5.5L7 14.5"/></svg></button>
+    <p class="caption" aria-live="polite"></p>
+    <div class="dots">
+      <button type="button" aria-label="Home screen"></button>
+      <button type="button" aria-label="Retirement countdown"></button>
+      <button type="button" aria-label="Trip countdown"></button>
+      <button type="button" aria-label="Templates"></button>
+      <button type="button" aria-label="Light and dark appearance"></button>
     </div>
   </section>
 
@@ -336,29 +395,21 @@
 
 <script>
   const track = document.querySelector(".track");
-  const slides = [...track.querySelectorAll(".slide")];
-  const [previous, next] = document.querySelectorAll(".controls button");
+  const slides = [...track.children];
+  const caption = document.querySelector(".caption");
+  const dots = [...document.querySelectorAll(".dots button")];
   const scrollBehavior = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
-  const centered = (slide) => slide.offsetLeft + slide.offsetWidth / 2 - track.clientWidth / 2;
-  const nearestIndex = () => {
-    const distances = slides.map((slide) => Math.abs(centered(slide) - track.scrollLeft));
-    return distances.indexOf(Math.min(...distances));
-  };
-  const show = (index) => {
-    const slide = slides[Math.max(0, Math.min(slides.length - 1, index))];
-    track.scrollTo({ left: centered(slide), behavior: scrollBehavior });
-  };
+  const nearestIndex = () => Math.round(track.scrollLeft / track.clientWidth);
+  const show = (index) => track.scrollTo({ left: slides[index].offsetLeft, behavior: scrollBehavior });
 
-  // Slides shrink and lose their caption as they leave the center.
+  let current = -1;
   function render() {
-    const spacing = slides[1].offsetLeft - slides[0].offsetLeft;
-    for (const slide of slides) {
-      const distance = Math.min(1, Math.abs(centered(slide) - track.scrollLeft) / spacing);
-      slide.style.setProperty("--distance", distance.toFixed(3));
-    }
-    previous.disabled = track.scrollLeft <= 1;
-    next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+    const index = nearestIndex();
+    if (index === current) return;
+    current = index;
+    caption.textContent = slides[index].dataset.caption;
+    dots.forEach((dot, i) => dot.setAttribute("aria-current", i === index));
   }
 
   let frame = 0;
@@ -370,10 +421,9 @@
   addEventListener("resize", scheduleRender);
   render();
 
-  previous.addEventListener("click", () => show(nearestIndex() - 1));
-  next.addEventListener("click", () => show(nearestIndex() + 1));
+  dots.forEach((dot, i) => dot.addEventListener("click", () => show(i)));
 
-  // Touch and trackpads scroll natively; a mouse drags the track, and a click brings a slide to the center.
+  // Touch and trackpads scroll natively; a mouse drags the track.
   let drag = null;
   let snapTimer = 0;
   track.addEventListener("pointerdown", (event) => {
@@ -397,20 +447,16 @@
     }
     track.scrollLeft = drag.left - (event.clientX - drag.x);
   });
-  function endDrag(clickedSlide = null) {
+  function endDrag() {
     if (!drag) return;
-    const { moved } = drag;
     drag = null;
-    show(!moved && clickedSlide ? slides.indexOf(clickedSlide) : nearestIndex());
+    show(nearestIndex());
     // Snapping waits for the smooth scroll, so the slide doesn't jump into place.
     snapTimer = setTimeout(() => track.classList.remove("dragging"), 450);
   }
-  track.addEventListener("pointerup", (event) => {
-    const hit = document.elementFromPoint(event.clientX, event.clientY);
-    endDrag(hit?.closest(".slide"));
-  });
-  track.addEventListener("pointercancel", () => endDrag());
-  track.addEventListener("lostpointercapture", () => endDrag());
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+  track.addEventListener("lostpointercapture", endDrag);
 </script>
 </body>
 </html>
