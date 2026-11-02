@@ -8,7 +8,9 @@ To preview the page locally, open `public/index.html` in a browser.
 
 The screenshots in `public/screens/` show the real app with sample data. Retake them when the app's interface changes. Each one is an sRGB JPEG, 804 pixels wide.
 
-`public/favicon.svg` is the source of the site's icons. `favicon.ico` (16, 32, and 48 pixels) and `apple-touch-icon.png` (180 pixels, with square corners) are exported from it, so export them again when it changes.
+`public/favicon.svg` is the source of `favicon.ico` (16, 32, and 48 pixels), so export the ICO again when the SVG changes. Its lights are larger than the app icon's, so they stay clear in a browser tab.
+
+`public/logo.svg` and `public/apple-touch-icon.png` (180 pixels, with square corners) follow the app icon, so update both when it changes. `logo.svg` adds rounded corners and a hairline edge that keeps its shape visible on the dark page.
 
 ## Domain
 

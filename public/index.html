@@ -84,6 +84,9 @@
     position: absolute;
     top: clamp(24px, 4.5vh, 44px);
     left: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 1.375rem;
     font-weight: 700;
     letter-spacing: -.02em;
@@ -320,7 +323,7 @@
     }
 
     main { display: block; width: auto; }
-    .brand { position: static; display: block; padding-top: 24px; }
+    .brand { position: static; padding-top: 24px; }
     .intro { padding: 40px 0 0; }
     .gallery { padding-block: 40px 0; }
     .gallery::before { inset: 0 -24px 12%; }
@@ -345,7 +348,7 @@
 </head>
 <body>
 <main>
-  <p class="brand">Xward</p>
+  <p class="brand"><img src="logo.svg" width="36" height="36" alt="">Xward</p>
 
   <section class="intro">
     <h1>Count down to <span>anything.</span></h1>
