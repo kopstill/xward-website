@@ -1,7 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="sand" gradientUnits="userSpaceOnUse" x1="0" y1="250" x2="0" y2="800">
+      <stop offset="0" stop-color="#FFB547"/>
+      <stop offset=".5" stop-color="#F0682C"/>
+      <stop offset="1" stop-color="#DE457A"/>
+    </linearGradient>
+    <clipPath id="band">
+      <rect y="704" width="1024" height="320"/>
+    </clipPath>
+  </defs>
   <rect width="1024" height="1024" rx="229" fill="#111113"/>
   <rect x="12" y="12" width="1000" height="1000" rx="217" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="24"/>
-  <circle cx="512" cy="240" r="104" fill="#FF453A"/>
-  <circle cx="512" cy="512" r="104" fill="#FFD60A"/>
-  <circle cx="512" cy="784" r="104" fill="#30D158"/>
+  <g stroke-width="112" stroke-linejoin="round">
+    <polygon points="354,742 670,742 512,540" fill="#3C2A2E" stroke="#3C2A2E"/>
+    <polygon points="354,742 670,742 512,540" fill="url(#sand)" stroke="url(#sand)" clip-path="url(#band)"/>
+    <polygon points="354,282 670,282 512,484" fill="url(#sand)" stroke="url(#sand)"/>
+  </g>
 </svg>
