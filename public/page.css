@@ -1,0 +1,91 @@
+/* The text pages: privacy policy and support. The home page keeps its own styles. */
+:root {
+  --page: #F5F5F7;
+  --ink: #1D1D1F;
+  --muted: #6E6E73;
+  --link: #0066CC;
+  --gutter: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #000;
+    --ink: #F5F5F7;
+    --muted: #A1A1A6;
+    --link: #2997FF;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  max-width: calc(36rem + 2 * var(--gutter));
+  min-height: 100vh;
+  min-height: 100svh;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.brand {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding-top: clamp(24px, 4.5vh, 44px);
+  color: inherit;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  text-decoration: none;
+}
+
+main { flex: 1; padding-block: clamp(32px, 6vh, 64px) 56px; }
+
+h1 {
+  font-size: clamp(1.875rem, 4.4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.022em;
+}
+
+.effective { margin-top: 8px; color: var(--muted); font-size: .875rem; }
+
+.lead {
+  margin-top: 24px;
+  font-size: clamp(1.0625rem, 1.8vw, 1.1875rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+h2 {
+  margin-top: 36px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+p { margin-top: 12px; text-wrap: pretty; }
+
+main a { color: var(--link); text-underline-offset: .15em; }
+
+footer {
+  padding-block: 8px 28px;
+  color: var(--muted);
+  font-size: .8125rem;
+}
+
+footer a { color: inherit; text-decoration: none; }
+footer a:hover, footer a:focus-visible { text-decoration: underline; }
