@@ -34,4 +34,6 @@ Apple's iCloud Mail hosts `hello@xward.app` through the Custom Email Domain feat
 | `TXT` | `@` | `v=spf1 include:icloud.com ~all` |
 | `CNAME` | `sig1._domainkey` | `sig1.dkim.xward.app.at.icloudmailadmin.com`, DNS only |
 
+The domain also has a DMARC record, which isn't part of Apple's setup: a `TXT` record named `_dmarc` with the content `v=DMARC1; p=none` and a TTL of 1 hour. Its policy of `none` asks receiving servers to take no action.
+
 `www.xward.app` redirects to `xward.app` with a 308 status. This redirect isn't in the code; it's set in the Vercel project under **Settings** > **Domains**. Vercel issues and renews the certificate automatically.
