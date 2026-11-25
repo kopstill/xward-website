@@ -16,12 +16,22 @@ The screenshots in `public/screens/` show the real app with sample data. Retake 
 
 ## Domain
 
-The domain is registered with Cloudflare, which requires its own name servers, so the DNS records stay there. The website needs these three records, all set to DNS only, with the proxy off. Their values come from the domain settings of the Vercel project. Cloudflare Email Routing, which forwards `hello@xward.app`, adds and manages its own mail records.
+The domain is registered with Cloudflare, which requires its own name servers, so the DNS records stay there. The website needs these three records, all set to DNS only, with the proxy off. Their values come from the domain settings of the Vercel project.
 
 | Type | Name | Content |
 | --- | --- | --- |
 | `A` | `@` | `216.150.1.1` |
 | `A` | `@` | `216.150.16.1` |
 | `CNAME` | `www` | `b0a3037401259471.vercel-dns-016.com` |
+
+Apple's iCloud Mail hosts `hello@xward.app` through the Custom Email Domain feature of iCloud+. Its mail records are in Cloudflare too, all with a TTL of 1 hour. Their values come from the Custom Email Domain settings at [icloud.com/icloudplus](https://www.icloud.com/icloudplus). Apple's verification record is specific to the Apple Account, so copy it from there.
+
+| Type | Name | Content |
+| --- | --- | --- |
+| `MX` | `@` | `mx01.mail.icloud.com`, priority 10 |
+| `MX` | `@` | `mx02.mail.icloud.com`, priority 10 |
+| `TXT` | `@` | Apple's verification record, which starts with `apple-domain=` |
+| `TXT` | `@` | `v=spf1 include:icloud.com ~all` |
+| `CNAME` | `sig1._domainkey` | `sig1.dkim.xward.app.at.icloudmailadmin.com`, DNS only |
 
 `www.xward.app` redirects to `xward.app` with a 308 status. This redirect isn't in the code; it's set in the Vercel project under **Settings** > **Domains**. Vercel issues and renews the certificate automatically.
